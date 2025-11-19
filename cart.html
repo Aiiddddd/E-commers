@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Keranjang — E-Shop</title>
+	<link rel="stylesheet" href="ecommerce.css">
+	<style>
+		/* minimal styles for cart page if main stylesheet missing */
+		.container{max-width:980px;margin:0 auto;padding:1rem}
+		.cart-list{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+		.cart-item{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid #eee;border-radius:8px}
+		.cart-item img{width:90px;height:90px;object-fit:cover;border-radius:6px}
+		.meta{flex:1}
+		.controls{display:flex;flex-direction:column;gap:6px}
+		.total-row{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;font-weight:700}
+		.btn{padding:8px 12px;border-radius:8px;border:0;background:#2b6ef6;color:#fff;cursor:pointer}
+		.btn.danger{background:#e53e3e}
+	</style>
+</head>
+<body>
+	<header class="container">
+		<h1>Keranjang Anda</h1>
+		<p><a href="indeex.html">← Kembali ke toko</a></p>
+	</header>
+
+	<main class="container">
+		<ul id="cart-list" class="cart-list"></ul>
+
+		<div class="total-row">
+			<div>Total</div>
+			<div id="cart-total">Rp0</div>
+		</div>
+
+		<div style="display:flex;gap:12px">
+			<button id="checkout" class="btn">Checkout</button>
+			<button id="clear-cart" class="btn danger">Kosongkan Keranjang</button>
+		</div>
+	</main>
+
+	<script>
+		const CART_KEY = 'demo_cart_v1';
+		function formatRupiah(v){ return 'Rp' + Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+		function loadCart(){ try{ const raw = localStorage.getItem(CART_KEY); return raw ? JSON.parse(raw) : {}; }catch(e){ return {}; } }
+		function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); render(); }
+
+		function render(){
+			const cart = loadCart();
+			const $list = document.getElementById('cart-list');
+			$list.innerHTML = '';
+			let total = 0;
+			for(const id in cart){
+				const it = cart[id];
+				total += (it.price||0) * it.qty;
+				const li = document.createElement('li');
+				li.className = 'cart-item';
+				li.innerHTML = `
+					<img src="${it.img}" alt="${it.title}" />
+					<div class="meta">
+						<div style="font-weight:700">${it.title}</div>
+						<div class="muted">${formatRupiah(it.price)} x ${it.qty} = ${formatRupiah(it.price*it.qty)}</div>
+					</div>
+					<div class="controls">
+						<div>
+							<button class="btn" data-action="inc" data-id="${id}">＋</button>
+							<button class="btn" data-action="dec" data-id="${id}">－</button>
+							<button class="btn" data-action="rm" data-id="${id}">Hapus</button>
+						</div>
+					</div>
+				`;
+				$list.appendChild(li);
+			}
+			document.getElementById('cart-total').textContent = formatRupiah(total);
+			// attach handlers
+			$list.querySelectorAll('button').forEach(b=>{
+				const id = b.dataset.id;
+				const act = b.dataset.action;
+				b.onclick = ()=>{
+					const cart = loadCart();
+					if(act==='inc'){ cart[id].qty = (cart[id].qty||0)+1; saveCart(cart); }
+					if(act==='dec'){ cart[id].qty = (cart[id].qty||1)-1; if(cart[id].qty<=0) delete cart[id]; saveCart(cart); }
+					if(act==='rm'){ delete cart[id]; saveCart(cart); }
+				};
+			});
+		}
+
+		document.getElementById('checkout').addEventListener('click', ()=>{
+			if(confirm('Lanjut ke checkout? (demo akan mengosongkan keranjang)')){
+				localStorage.removeItem(CART_KEY);
+				render();
+				alert('Terima kasih — demo checkout selesai.');
+			}
+		});
+		document.getElementById('clear-cart').addEventListener('click', ()=>{
+			if(confirm('Kosongkan seluruh keranjang?')){
+				localStorage.removeItem(CART_KEY);
+				render();
+			}
+		});
+
+		render();
+	</script>
+</body>
+</html>

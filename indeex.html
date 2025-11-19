@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify - E-Commerce</title>
+    <link rel="stylesheet" href="ecommerce.css">
+    <!-- new: inline styles for add-to-cart animation (kejar cepat, bisa dipindah ke file css) -->
+    <style>
+        /* flying image used for add-to-cart animation */
+        .fly-img{
+            position:fixed;
+            z-index:9999;
+            pointer-events:none;
+            will-change:transform,opacity;
+            transition:transform .7s cubic-bezier(.2,.9,.3,1), opacity .45s ease;
+            border-radius:8px;
+            box-shadow:0 18px 40px rgba(11,18,32,0.18);
+            overflow:hidden;
+            backface-visibility:hidden;
+        }
+
+        /* badge pulse when item added */
+        .badge.pulse{
+            animation:badgePulse .42s ease;
+        }
+        @keyframes badgePulse{
+            0%{ transform:scale(1); opacity:1; }
+            40%{ transform:scale(1.28); opacity:1; }
+            100%{ transform:scale(1); opacity:1; }
+        }
+
+        /* cart button arrival shake */
+        .cart-shake{
+            animation:cartShake .42s cubic-bezier(.2,.9,.3,1);
+        }
+        @keyframes cartShake{
+            0%{ transform:translateY(0) rotate(0deg); }
+            30%{ transform:translateY(-6px) rotate(-6deg); }
+            60%{ transform:translateY(3px) rotate(4deg); }
+            100%{ transform:translateY(0) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-top">
+                <button class="menu-btn mobile-only">☰</button>
+                <div class="logo">Nita shop</div>
+                
+                <div class="search-bar desktop-only">
+                    <input type="search" placeholder="Cari produk..." class="search-input">
+                    <span class="search-icon">🔍</span>
+                </div>
+                
+                <div class="nav-icons">
+                    <button class="icon-btn desktop-only">👤</button>
+                    <!-- changed: love button now opens love.html -->
+                    <button class="icon-btn love-btn desktop-only" title="Favorit" onclick="location.href='love.html'">
+                        ❤️
+                        <span class="love-count">0</span>
+                    </button>
+                    <button class="icon-btn cart-btn" onclick="location.href='cart.html'">
+                        🛒
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="nav-categories desktop-only">
+                <a href="koleksi-baru.html" class="nav-link">Koleksi Baru</a>
+                <a href="pria.html" class="nav-link">Pria</a>
+                <a href="wanita.html" class="nav-link">Wanita</a>
+                <a href="aksesoris.html" class="nav-link">Aksesoris</a>
+                <a href="sale.html" class="nav-link">Sale</a>
+            </div>
+            
+            <div class="search-bar mobile-only">
+                <input type="search" placeholder="Cari produk..." class="search-input">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <img src="https://images.unsplash.com/photo-1759078479318-61a755005d30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBiYW5uZXJ8ZW58MXx8fHwxNzYyOTg1NTMzfDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Hero Banner" class="hero-image">
+        <div class="hero-content container">
+            <div class="hero-text">
+                <h1>Temukan Gaya Terbaikmu</h1>
+                <p>Jelajahi koleksi fashion terbaru kami dengan desain modern dan kualitas premium. Dapatkan diskon hingga 50% untuk pembelian pertama.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">Belanja Sekarang</button>
+                    <button class="btn btn-outline">Lihat Koleksi</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🚚</div>
+                    <div class="feature-text">
+                        <h4>Gratis Ongkir</h4>
+                        <p>Untuk pembelian di atas Rp 500.000</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h4>Pembayaran Aman</h4>
+                        <p>Transaksi 100% aman & terpercaya</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-text">
+                        <h4>Mudah Dikembalikan</h4>
+                        <p>Return gratis dalam 30 hari</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎧</div>
+                    <div class="feature-text">
+                        <h4>Customer Support</h4>
+                        <p>Siap membantu 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2>Kategori Pilihan</h2>
+                <p>Temukan produk favorit Anda dari berbagai kategori yang tersedia</p>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1632773004171-02bc1c4a726a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBmYXNoaW9uJTIwY2xvdGhpbmd8ZW58MXx8fHwxNzYzMDU1MzEyfDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Fashion Pria">
+                    <div class="category-overlay">
+                        <h3>Fashion Pria</h3>
+                        <p>245 Produk</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1622760807301-4d2351a5a942?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmVha2VycyUyMHNob2VzJTIwcHJvZHVjdHxlbnwxfHx8fDE3NjMxMDQ5NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Sepatu">
+                    <div class="category-overlay">
+                        <h3>Sepatu</h3>
+                        <p>189 Produk</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1627803589917-65023f4a0e70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWNrcGFjayUyMGFjY2Vzc29yaWVzfGVufDF8fHx8MTc2MzA5MDY3M3ww&ixlib=rb-4.1.0&q=80&w=1080" alt="Tas & Ransel">
+                    <div class="category-overlay">
+                        <h3>Tas & Ransel</h3>
+                        <p>134 Produk</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1663585703603-9be01a72a62a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5nbGFzc2VzJTIwZmFzaGlvbnxlbnwxfHx8fDE3NjMwNTM0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Aksesoris">
+                    <div class="category-overlay">
+                        <h3>Aksesoris</h3>
+                        <p>312 Produk</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <div class="container">
+            <div class="section-header-row">
+                <div>
+                    <h2>Produk Unggulan</h2>
+                    <p>Produk pilihan dengan kualitas terbaik</p>
+                </div>
+            </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1622760807301-4d2351a5a942?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmVha2VycyUyMHNob2VzJTIwcHJvZHVjdHxlbnwxfHx8fDE3NjMxMDQ5NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-new">Baru</span>
+                            <span class="badge-discount">-25%</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p1" data-title="Sneakers Premium Sport" data-price="899000" data-img="https://images.unsplash.com/photo-1622760807301-4d2351a5a942?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Sneakers Premium Sport - Comfortable Running Shoes</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.8</span>
+                            <span class="reviews">(245)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 899.000</span>
+                            <span class="original-price">Rp 1.200.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1543076447-215ad9ba6923?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZW5pbSUyMGphY2tldHxlbnwxfHx8fDE3NjMxMDQ5NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-discount">-23%</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p2" data-title="Denim Jacket Classic" data-price="650000" data-img="https://images.unsplash.com/photo-1543076447-215ad9ba6923?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Denim Jacket Classic - Premium Quality Material</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.7</span>
+                            <span class="reviews">(189)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 650.000</span>
+                            <span class="original-price">Rp 850.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1702865053958-71ec751c4118?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3YXRjaCUyMGx1eHVyeXxlbnwxfHx8fDE3NjMwMTM5MTN8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-new">Baru</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p3" data-title="Smartwatch Luxury Edition" data-price="2500000" data-img="https://images.unsplash.com/photo-1702865053958-71ec751c4118?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Smartwatch Luxury Edition - Fitness Tracker</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.9</span>
+                            <span class="reviews">(412)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 2.500.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1627803589917-65023f4a0e70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWNrcGFjayUyMGFjY2Vzc29yaWVzfGVufDF8fHx8MTc2MzA5MDY3M3ww&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-discount">-25%</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p4" data-title="Backpack Travel Pro" data-price="450000" data-img="https://images.unsplash.com/photo-1627803589917-65023f4a0e70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Backpack Travel Pro - Waterproof & Spacious</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.6</span>
+                            <span class="reviews">(156)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 450.000</span>
+                            <span class="original-price">Rp 600.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1663585703603-9be01a72a62a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5nbGFzc2VzJTIwZmFzaGlvbnxlbnwxfHx8fDE3NjMwNTM0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p5" data-title="Sunglasses Fashion" data-price="350000" data-img="https://images.unsplash.com/photo-1663585703603-9be01a72a62a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Sunglasses Fashion - UV Protection Polarized</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.5</span>
+                            <span class="reviews">(98)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 350.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1632773004171-02bc1c4a726a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBmYXNoaW9uJTIwY2xvdGhpbmd8ZW58MXx8fHwxNzYzMDU1MzEyfDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-discount">-33%</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p6" data-title="Fashion T-Shirt Collection" data-price="199000" data-img="https://images.unsplash.com/photo-1632773004171-02bc1c4a726a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Fashion T-Shirt Collection - Cotton Premium</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.7</span>
+                            <span class="reviews">(324)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 199.000</span>
+                            <span class="original-price">Rp 299.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaG9wcGluZyUyMGJhZ3N8ZW58MXx8fHwxNzYzMDYyMTQwfDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-new">Baru</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p7" data-title="Shopping Tote Bag" data-price="175000" data-img="https://images.unsplash.com/photo-1483985988355-763728e1935b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Shopping Tote Bag - Eco Friendly Material</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.4</span>
+                            <span class="reviews">(78)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 175.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1702865053958-71ec751c4118?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3YXRjaCUyMGx1eHVyeXxlbnwxfHx8fDE3NjMwMTM5MTN8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Product">
+                        <div class="product-badges">
+                            <span class="badge-discount">-27%</span>
+                        </div>
+                        <button class="wishlist-btn">❤️</button>
+                        <button class="add-cart-btn" data-id="p8" data-title="Sports Watch Digital" data-price="550000" data-img="https://images.unsplash.com/photo-1702865053958-71ec751c4118?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080">🛒 Tambah ke Keranjang</button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Sports Watch Digital - Water Resistant 50M</h3>
+                        <div class="product-rating">
+                            <span class="stars">⭐ 4.8</span>
+                            <span class="reviews">(267)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price">Rp 550.000</span>
+                            <span class="original-price">Rp 750.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Banner -->
+    <section class="promo-banner">
+        <div class="container">
+            <div class="promo-content">
+                <h2>Sale Hingga 50% Off!</h2>
+                <p>Dapatkan diskon besar-besaran untuk semua koleksi fashion pilihan. Promo terbatas, buruan belanja sekarang!</p>
+                <button class="btn btn-white">Belanja Sekarang</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Dapatkan Penawaran Eksklusif</h2>
+                <p>Subscribe newsletter kami dan dapatkan update produk terbaru serta penawaran spesial langsung ke email Anda</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Masukkan email Anda" class="email-input">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>SHOPIFY</h3>
+                    <p>Toko online terpercaya dengan koleksi fashion terlengkap dan kualitas terbaik.</p>
+                    <div class="social-links">
+                        <a href="#">📘</a>
+                        <a href="#">📷</a>
+                        <a href="#">🐦</a>
+                        <a href="#">▶️</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Belanja</h4>
+                    <ul>
+                        <li><a href="#">Koleksi Baru</a></li>
+                        <li><a href="#">Pria</a></li>
+                        <li><a href="#">Wanita</a></li>
+                        <li><a href="#">Aksesoris</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Bantuan</h4>
+                    <ul>
+                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="#">Cara Belanja</a></li>
+                        <li><a href="#">Pengiriman</a></li>
+                        <li><a href="#">Pengembalian</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Dapatkan update produk terbaru dan penawaran eksklusif.</p>
+                    <div class="footer-form">
+                        <input type="email" placeholder="Email Anda">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 Shopify. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Syarat & Ketentuan</a>
+                    <a href="#">Kebijakan Privasi</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- load app script -->
+    <script src="app.js" defer></script>
+</body>
+</html>

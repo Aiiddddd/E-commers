@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Sale — Nita shop</title>
+	<link rel="stylesheet" href="/styles/ecommerce.css">
+	<style>
+		.fly-img{position:fixed;z-index:9999;pointer-events:none;will-change:transform,opacity;transition:transform .7s cubic-bezier(.2,.9,.3,1), opacity .45s ease;border-radius:8px;box-shadow:0 18px 40px rgba(11,18,32,0.18);overflow:hidden}
+		.container{max-width:1100px;margin:0 auto;padding:1rem}
+		.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+		.discount{color:#e53e3e;font-weight:700}
+	</style>
+</head>
+<body>
+	<header class="container" style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;">
+		<h1>Sale</h1>
+		<nav><a href="indeex.html">Beranda</a> · <a href="cart.html">Keranjang</a></nav>
+	</header>
+
+	<main class="container">
+		<p class="muted">Barang-barang diskon — stok terbatas.</p>
+		<div class="products-grid">
+			<article class="product-card">
+				<img src="https://images.unsplash.com/photo-1632773004171-02bc1c4a726a?q=80&w=800&auto=format&fit=crop" alt="T-Shirt Sale">
+				<h3>Basic T-Shirt</h3>
+				<div class="product-price"><span class="discount">Rp 99.000</span> <small class="original-price">Rp 199.000</small></div>
+				<button class="add-cart-btn" data-id="s1" data-title="Basic T-Shirt" data-price="99000" data-img="https://images.unsplash.com/photo-1632773004171-02bc1c4a726a?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+
+			<article class="product-card">
+				<img src="https://images.unsplash.com/photo-1627803589917-65023f4a0e70?q=80&w=800&auto=format&fit=crop" alt="Backpack Sale">
+				<h3>Backpack Discount</h3>
+				<div class="product-price"><span class="discount">Rp 299.000</span> <small class="original-price">Rp 450.000</small></div>
+				<button class="add-cart-btn" data-id="s2" data-title="Backpack Discount" data-price="299000" data-img="https://images.unsplash.com/photo-1627803589917-65023f4a0e70?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+		</div>
+	</main>
+
+	<script src="./app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Koleksi Baru — Nita shop</title>
+	<link rel="stylesheet" href="ecommerce.css">
+	<style>
+		/* small animation helpers (sama seperti indeex) */
+		.fly-img{position:fixed;z-index:9999;pointer-events:none;will-change:transform,opacity;transition:transform .7s cubic-bezier(.2,.9,.3,1), opacity .45s ease;border-radius:8px;box-shadow:0 18px 40px rgba(11,18,32,0.18);overflow:hidden;backface-visibility:hidden}
+		.badge.pulse{animation:badgePulse .42s ease}@keyframes badgePulse{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+		.cart-shake{animation:cartShake .42s cubic-bezier(.2,.9,.3,1)}@keyframes cartShake{0%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-6deg)}60%{transform:translateY(3px) rotate(4deg)}100%{transform:translateY(0) rotate(0)}}
+		.container{max-width:1100px;margin:0 auto;padding:1rem}
+		.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+		.product-card{background:#fff;padding:12px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.04)}
+		.product-image-wrapper{position:relative;border-radius:8px;overflow:hidden}
+		.add-cart-btn{margin-top:8px;padding:8px 10px;border-radius:8px;border:0;background:#2b6ef6;color:#fff;cursor:pointer}
+	</style>
+</head>
+<body>
+	<header class="container" style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;">
+		<h1>Koleksi Baru</h1>
+		<nav>
+			<a href="indeex.html">Beranda</a> · <a href="cart.html">Keranjang</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<p class="muted">Kumpulan produk terbaru kami — pilih yang kamu suka.</p>
+
+		<div class="products-grid">
+			<!-- product 1 -->
+			<article class="product-card">
+				<div class="product-image-wrapper">
+					<img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop" alt="New Coat">
+				</div>
+				<h3>Coat Minimalis</h3>
+				<div class="product-price">Rp 799.000</div>
+				<button class="add-cart-btn" data-id="nb1" data-title="Coat Minimalis" data-price="799000" data-img="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+
+			<!-- product 2 -->
+			<article class="product-card">
+				<div class="product-image-wrapper">
+					<img src="https://images.unsplash.com/photo-1520975915723-3f3a9d24b4f5?q=80&w=800&auto=format&fit=crop" alt="Tas Baru">
+				</div>
+				<h3>Tas Ransel Koleksi Baru</h3>
+				<div class="product-price">Rp 425.000</div>
+				<button class="add-cart-btn" data-id="nb2" data-title="Tas Ransel Koleksi Baru" data-price="425000" data-img="https://images.unsplash.com/photo-1520975915723-3f3a9d24b4f5?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+
+			<!-- product 3 -->
+			<article class="product-card">
+				<div class="product-image-wrapper">
+					<img src="https://images.unsplash.com/photo-1518546305920-4b9a4b9f2b5c?q=80&w=800&auto=format&fit=crop" alt="Jam Baru">
+				</div>
+				<h3>Jam Tangan Elegan</h3>
+				<div class="product-price">Rp 620.000</div>
+				<button class="add-cart-btn" data-id="nb3" data-title="Jam Tangan Elegan" data-price="620000" data-img="https://images.unsplash.com/photo-1518546305920-4b9a4b9f2b5c?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+
+			<!-- product 4 -->
+			<article class="product-card">
+				<div class="product-image-wrapper">
+					<img src="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=800&auto=format&fit=crop" alt="Sepatu Baru">
+				</div>
+				<h3>Sneakers Limited</h3>
+				<div class="product-price">Rp 1.099.000</div>
+				<button class="add-cart-btn" data-id="nb4" data-title="Sneakers Limited" data-price="1099000" data-img="https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+		</div>
+	</main>
+
+	<script src="./app.js" defer></script>
+</body>
+</html>

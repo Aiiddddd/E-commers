@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Pria — Nita shop</title>
+	<link rel="stylesheet" href="ecommerce.css">
+	<style>
+		.fly-img{position:fixed;z-index:9999;pointer-events:none;will-change:transform,opacity;transition:transform .7s cubic-bezier(.2,.9,.3,1), opacity .45s ease;border-radius:8px;box-shadow:0 18px 40px rgba(11,18,32,0.18);overflow:hidden}
+		.badge.pulse{animation:badgePulse .42s ease}@keyframes badgePulse{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+		.cart-shake{animation:cartShake .42s}@keyframes cartShake{0%{transform:translateY(0)}30%{transform:translateY(-6px)}60%{transform:translateY(3px)}100%{transform:translateY(0)}}
+		.container{max-width:1100px;margin:0 auto;padding:1rem}
+		.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+		.product-card{background:#fff;padding:12px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.04)}
+	</style>
+</head>
+<body>
+	<header class="container" style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;">
+		<h1>Pria</h1>
+		<nav><a href="indeex.html">Beranda</a> · <a href="cart.html">Keranjang</a></nav>
+	</header>
+
+	<main class="container">
+		<div class="products-grid">
+			<article class="product-card">
+				<img src="https://images.unsplash.com/photo-1520975915723-3f3a9d24b4f5?q=80&w=800&auto=format&fit=crop" alt="Jaket Pria">
+				<h3>Jaket Bomber</h3>
+				<div class="product-price">Rp 599.000</div>
+				<button class="add-cart-btn" data-id="m1" data-title="Jaket Bomber" data-price="599000" data-img="https://images.unsplash.com/photo-1520975915723-3f3a9d24b4f5?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+
+			<article class="product-card">
+				<img src="https://images.unsplash.com/photo-1622760807301-4d2351a5a942?q=80&w=800&auto=format&fit=crop" alt="Sepatu Pria">
+				<h3>Sneakers Casual</h3>
+				<div class="product-price">Rp 749.000</div>
+				<button class="add-cart-btn" data-id="m2" data-title="Sneakers Casual" data-price="749000" data-img="https://images.unsplash.com/photo-1622760807301-4d2351a5a942?q=80&w=800&auto=format&fit=crop">🛒 Tambah ke Keranjang</button>
+			</article>
+		</div>
+	</main>
+
+	<script src="./app.js" defer></script>
+</body>
+</html>

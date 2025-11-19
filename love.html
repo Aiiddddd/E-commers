@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Favorit — Nita shop</title>
+	<link rel="stylesheet" href="ecommerce.css">
+	<style>
+		/* minimal layout untuk halaman love */
+		.container{max-width:1100px;margin:0 auto;padding:1rem}
+		.header-row{display:flex;justify-content:space-between;align-items:center;gap:16px}
+		.love-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:16px}
+		.love-card{background:#fff;border-radius:10px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,0.04)}
+		.love-card img{width:96px;height:96px;object-fit:cover;border-radius:8px}
+		.love-meta{flex:1}
+		.love-actions{display:flex;flex-direction:column;gap:8px}
+		.btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+		.btn.primary{background:#2b6ef6;color:#fff}
+		.btn.danger{background:#e53e3e;color:#fff}
+		.empty{padding:28px;text-align:center;color:#666}
+		.fly-img{position:fixed;z-index:9999;pointer-events:none;will-change:transform,opacity;transition:transform .7s cubic-bezier(.2,.9,.3,1), opacity .45s ease;border-radius:8px;box-shadow:0 18px 40px rgba(11,18,32,0.18);overflow:hidden}
+	</style>
+</head>
+<body>
+	<header class="container header-row">
+		<div>
+			<h1>Favorit Saya</h1>
+			<p class="muted">Item yang kamu tandai ❤️ — lihat, hapus, atau pindahkan ke keranjang.</p>
+		</div>
+		<nav>
+			<a href="indeex.html">Beranda</a> · <a href="cart.html">Keranjang</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<div style="display:flex;gap:12px;margin-bottom:12px;">
+			<button id="add-all-to-cart" class="btn primary">Tambah Semua ke Keranjang</button>
+			<button id="clear-love" class="btn danger">Kosongkan Favorit</button>
+		</div>
+
+		<div id="love-list" class="love-grid"></div>
+		<div id="love-empty" class="empty" style="display:none">Belum ada favorit. Klik ❤️ pada produk untuk menambah.</div>
+	</main>
+
+	<script src="./app.js" defer></script>
+	<script>
+		// Jalankan setelah app.js ter-load (defer ensures order)
+		document.addEventListener('DOMContentLoaded', ()=>{
+			const $list = document.getElementById('love-list');
+			const $empty = document.getElementById('love-empty');
+			const $btnAddAll = document.getElementById('add-all-to-cart');
+			const $btnClear = document.getElementById('clear-love');
+
+			function render(){
+				const love = loadLove();
+				$list.innerHTML = '';
+				const keys = Object.keys(love);
+				if(keys.length === 0){
+					$empty.style.display = 'block';
+					$btnAddAll.disabled = true;
+					$btnClear.disabled = true;
+					updateLoveUI(); // ensure header badge updated
+					return;
+				}
+				$empty.style.display = 'none';
+				$btnAddAll.disabled = false;
+				$btnClear.disabled = false;
+
+				keys.forEach(id=>{
+					const it = love[id];
+					const card = document.createElement('div');
+					card.className = 'love-card';
+					card.innerHTML = `
+						<img src="${it.img||''}" alt="${it.title}">
+						<div class="love-meta">
+							<div style="font-weight:700">${it.title}</div>
+							<div class="muted">${formatRupiah(it.price || 0)}</div>
+						</div>
+						<div class="love-actions">
+							<button class="btn primary" data-action="to-cart" data-id="${id}">Tambah ke Keranjang</button>
+							<button class="btn" data-action="remove" data-id="${id}">Hapus</button>
+						</div>
+					`;
+					$list.appendChild(card);
+				});
+				updateLoveUI(); // update header badge
+			}
+
+			// Delegated click handling
+			$list.addEventListener('click', (e)=>{
+				const btn = e.target.closest('button');
+				if(!btn) return;
+				const act = btn.dataset.action;
+				const id = btn.dataset.id;
+				if(act === 'remove'){
+					if(confirm('Hapus item dari favorit?')){
+						removeFromLove(id);
+						render();
+					}
+				}
+				if(act === 'to-cart'){
+					// Add to cart using meta from love storage
+					const love = loadLove();
+					const meta = love[id];
+					if(meta){
+						// find image element in the card to pass for animation
+						const imgEl = btn.closest('.love-card')?.querySelector('img');
+						addToCart(id, 1, meta, imgEl);
+						// optionally remove from love after moving to cart
+						removeFromLove(id);
+						render();
+						// also update cart UI badge
+						updateCartUI();
+					}
+				}
+			});
+
+			$btnClear.addEventListener('click', ()=>{
+				if(confirm('Kosongkan semua favorit?')){
+					localStorage.removeItem('demo_love_v1');
+					render();
+				}
+			});
+
+			$btnAddAll.addEventListener('click', ()=>{
+				const love = loadLove();
+				const ids = Object.keys(love);
+				if(ids.length === 0) return;
+				ids.forEach(id=>{
+					const meta = love[id];
+					addToCart(id, 1, meta, /* no animation for bulk */ null);
+				});
+				// clear love after moving
+				localStorage.removeItem('demo_love_v1');
+				render();
+				updateCartUI();
+				alert('Semua item favorit dipindahkan ke keranjang.');
+			});
+
+			// initial render
+			render();
+		});
+	</script>
+</body>
+</html>
